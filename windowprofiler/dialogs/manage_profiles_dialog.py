@@ -211,6 +211,37 @@ class ManageProfilesDialog(Gtk.Window):
             break
 
 
+    def __on_btn_edit_profile_clicked(self):
+        if not self.__current_profile is None:
+            old_profile_name: str = self.__cmb_profile.get_model()[self.__cmb_profile.get_active()][0]
+
+            while True:
+                dialog = InputDialog("Edit Profile", "Insert a new name for the window profile", old_profile_name, self)
+                response = dialog.run()
+
+                if response == Gtk.ResponseType.OK and dialog.get_value():
+                    new_profile_name: str = dialog.get_value().strip() if dialog.get_value() else ""
+
+                    if new_profile_name != old_profile_name:
+                        if new_profile_name == "":
+                            dialog.destroy()
+                            continue
+
+                        existing_profile = self.__window.get_profile(new_profile_name)
+                        if existing_profile:
+                            dialog.destroy()
+                            MessageDialog("A profile with that name already exists. Choose another name.", self)
+                            continue
+
+                        self.__window.remove_profile(profile=self.__current_profile)
+                        self.__window.add_profile(new_profile_name, self.__current_profile)
+                        self.__build_profile_combo(new_profile_name)
+
+                dialog.destroy()
+                break
+
+
+
     def __on_btn_del_profile_clicked(self):
         if not self.__current_profile is None:
             profile_name: str = self.__cmb_profile.get_model()[self.__cmb_profile.get_active()][0]
@@ -222,6 +253,7 @@ class ManageProfilesDialog(Gtk.Window):
 
 
     def __on_profile_combo_changed(self, combo):
+        self.__btn_edit_profile.set_sensitive(combo.get_active() != -1)
         self.__btn_del_profile.set_sensitive(combo.get_active() != -1)
         self.__resolution_frame.set_sensitive(combo.get_active() != -1)
         self.__workspace_frame.set_sensitive(combo.get_active() != -1)
@@ -326,8 +358,8 @@ class ManageProfilesDialog(Gtk.Window):
         icon_add.set_from_file(os.path.join(icon_path, "add.png"))
         icon_del.set_from_file(os.path.join(icon_path, "remove.png"))
 
-        self.__btn_edit_profile = Gtk.Button() #.new_from_icon_name("pencil", Gtk.IconSize.LARGE_TOOLBAR)
-        self.__btn_edit_profile.connect("clicked", lambda x: self.__on_btn_add_profile_clicked())
+        self.__btn_edit_profile = Gtk.Button()
+        self.__btn_edit_profile.connect("clicked", lambda x: self.__on_btn_edit_profile_clicked())
         self.__btn_edit_profile.set_size_request(30, 30)
         self.__btn_edit_profile.set_image(icon_edit)
         self.__profile_box.pack_start(self.__btn_edit_profile, False, False, 0)
