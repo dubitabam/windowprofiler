@@ -1,4 +1,6 @@
 import gi
+import os
+import sys
 
 gi.require_version('Gtk', '3.0')
 gi.require_version('Wnck', '3.0')
@@ -316,15 +318,31 @@ class ManageProfilesDialog(Gtk.Window):
         self.__cmb_profile.connect("changed", self.__on_profile_combo_changed)
         self.__profile_box.pack_start(self.__cmb_profile, True, True, 0)
 
+        icon_path = os.path.normpath(os.path.join(os.path.dirname(__file__), "../../icons"))
+        icon_edit = Gtk.Image()
+        icon_add = Gtk.Image()
+        icon_del = Gtk.Image()
+        icon_edit.set_from_file(os.path.join(icon_path, "edit.png"))
+        icon_add.set_from_file(os.path.join(icon_path, "add.png"))
+        icon_del.set_from_file(os.path.join(icon_path, "remove.png"))
+
+        self.__btn_edit_profile = Gtk.Button() #.new_from_icon_name("pencil", Gtk.IconSize.LARGE_TOOLBAR)
+        self.__btn_edit_profile.connect("clicked", lambda x: self.__on_btn_add_profile_clicked())
+        self.__btn_edit_profile.set_size_request(30, 30)
+        self.__btn_edit_profile.set_image(icon_edit)
+        self.__profile_box.pack_start(self.__btn_edit_profile, False, False, 0)
+
         self.__btn_add_profile = Gtk.Button.new_from_icon_name("add", Gtk.IconSize.LARGE_TOOLBAR)
         self.__btn_add_profile.connect("clicked", lambda x: self.__on_btn_add_profile_clicked())
         self.__btn_add_profile.set_size_request(30, 30)
+        self.__btn_add_profile.set_image(icon_add)
         self.__profile_box.pack_start(self.__btn_add_profile, False, False, 0)
 
         self.__btn_del_profile = Gtk.Button.new_from_icon_name("remove", Gtk.IconSize.LARGE_TOOLBAR)
         self.__btn_del_profile.connect("clicked", lambda x: self.__on_btn_del_profile_clicked())
         self.__btn_del_profile.set_size_request(30, 30)
         self.__btn_del_profile.set_sensitive(False)
+        self.__btn_del_profile.set_image(icon_del)
         self.__profile_box.pack_start(self.__btn_del_profile, False, False, 0)
 
 
