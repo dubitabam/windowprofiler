@@ -14,7 +14,7 @@ class WindowProfile:
         name: str = None,
         match_name: bool = False,
         match_regex: bool = False,
-        auto_apply: bool = False,
+        auto_apply: bool = True,
         window_count: int = 0,
         restore_size: bool = True,
         restore_position: bool = True,
