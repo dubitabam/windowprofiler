@@ -59,6 +59,7 @@ class Config:
         self.manage_mode = argparser.args.MANAGE
         self.restore_window = argparser.args.RESTORE_WINDOW
         self.restore_all = argparser.args.RESTORE_ALL
+        self.restore_globally = argparser.args.RESTORE_GLOBALLY
         self.purge_window = argparser.args.PURGE
         if argparser and argparser.args and argparser.args.PROFILE_PATH:
             self.profile_path = os.path.realpath(os.path.expandvars(os.path.expanduser(os.path.normpath(argparser.args.PROFILE_PATH))))

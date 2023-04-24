@@ -70,11 +70,12 @@ Rest of the options in this section should be self-explanatory.
 
 Here you can make the profile match only windows with a certain text in the title bar.
 
-### Restoring profiles / --restore / --restore-all
+### Restoring profiles / --restore / --restore-all / --restore-globally
 
 Create a keybinding for `windowprofiler.py -restore` and/or `windowprofiler.py --restore-all`.
 Select a window you have a saved profile for and press the keybinding for `--restore`. If a suitable profile is found it'll be applied.
-`--restore-all` does the same thing but for all windows on current workspace.
+`--restore-all` does the same thing but for all windows on current workspace and `--restore--globally` for all
+windows on all workspaces.
 
 ### Demon
 
@@ -87,8 +88,8 @@ Use whatever your distribution offers.
 
 Here's my sxhkd config:
 ```sh
-super + ctrl + alt + {m,p,r,a}
-    /usr/bin//window-profiler {-m,-p,-r,-a}
+super + ctrl + alt + {m,p,r,a,g}
+    /usr/bin//window-profiler {-m,-p,-r,-a,-g}
 ```
 
 ### Logging

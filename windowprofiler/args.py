@@ -35,6 +35,14 @@ class ArgParser:
         )
 
         self.__argparser.add_argument(
+            "-g", "--restore-globally",
+            help="restores the geometry profile for all windows on all workspaces. only works for workspace specific profiles",
+            dest="RESTORE_GLOBALLY",
+            action="store_true",
+            default=False,
+        )
+
+        self.__argparser.add_argument(
             "-p", "--purge",
             help="deletes all saved profiles of the currently active window",
             dest="PURGE",

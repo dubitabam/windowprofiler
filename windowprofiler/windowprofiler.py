@@ -62,7 +62,11 @@ class WindowProfiler:
                             profile.restore(wnck_window)
 
         elif self.__config.restore_all:
-            self.__restore_all_windows()
+            self.__restore_all_windows_on_workspace()
+            pass
+
+        elif self.__config.restore_globally:
+            self.__restore_all_windows_globally()
             pass
 
         elif self.__config.purge_window:
@@ -90,13 +94,22 @@ class WindowProfiler:
         sys.exit(0)
 
 
-    def __restore_all_windows(self):
-        current_workspace = self.__screen.get_active_workspace().get_number()
+    def __restore_all_windows_globally(self):
+        ws_count = self.__screen.get_workspace_count()
+        for i in range(ws_count):
+            self.__restore_all_windows_on_workspace(i)
+
+
+    def __restore_all_windows_on_workspace(self, workspace_number = None):
+
+        if workspace_number is None:
+            workspace_number = self.__screen.get_active_workspace().get_number()
+
         window_count = {}
 
         windows_on_workspace = list(
             filter(
-                lambda x: Window.window_is_handleable(x) and x.get_workspace().get_number() == current_workspace,
+                lambda x: Window.window_is_handleable(x) and x.get_workspace().get_number() == workspace_number,
                 self.__screen.get_windows(),
             )
         )
@@ -118,5 +131,6 @@ class WindowProfiler:
                         if profile.window_count == 0 or profile.window_count == window_count[counter_key]:
                             Logger.info(f"restoring profile '{ profile_id }' for '{ wnck_window.get_class_instance_name() } { wnck_window.get_name() }'")
                             profile.restore(wnck_window)
+
 
 WindowProfiler()
