@@ -67,6 +67,9 @@ class ManageProfilesDialog(Gtk.Window):
         self.__spn_width.set_value(0)
         self.__spn_x.set_value(0)
         self.__spn_y.set_value(0)
+        self.__txt_cmd.set_text("")
+        self.__chk_cmd_on_focus.set_active(False)
+        self.__chk_cmd_on_start.set_active(False)
         if not screen is None:
             self.__txt_resolution.set_text(f"{ screen.get_width() }x{ screen.get_height() }")
         else:
@@ -101,6 +104,9 @@ class ManageProfilesDialog(Gtk.Window):
         self.__btn_max_horizontal.set_active(profile.state & Wnck.WindowState.MAXIMIZED_HORIZONTALLY)
         self.__btn_max_vertical.set_active(profile.state & Wnck.WindowState.MAXIMIZED_VERTICALLY)
         self.__btn_fullscreen.set_active(profile.state & Wnck.WindowState.FULLSCREEN)
+        self.__txt_cmd.set_text(profile.runcmd)
+        self.__chk_cmd_on_focus.set_active(profile.runcmd_on_focus)
+        self.__chk_cmd_on_start.set_active(profile.runcmd_on_start)
 
 
     def __apply_ui_to_profile(self, profile: WindowProfile):
@@ -120,6 +126,9 @@ class ManageProfilesDialog(Gtk.Window):
         profile.restore_state = self.__chk_restore_state.get_active()
         profile.window_count = self.__spn_windowcount.get_value()
         profile.workspace = self.__cmb_workspace.get_active() if not self.__chk_fallback.get_active() else None
+        profile.runcmd = self.__txt_cmd.get_text()
+        profile.runcmd_on_start = self.__chk_cmd_on_start.get_active()
+        profile.runcmd_on_focus = self.__chk_cmd_on_focus.get_active()
 
         if self.__btn_minimized.get_active():
             profile.state |= Wnck.WindowState.MINIMIZED
@@ -561,6 +570,33 @@ class ManageProfilesDialog(Gtk.Window):
         self.__txt_name = Gtk.Entry()
         self.__txt_name.set_sensitive(False)
         self.__name_box.pack_start(self.__txt_name, True, True, 0)
+
+
+        # run cmd
+        self.__cmd_frame = Gtk.Frame.new("Run command when window")
+        # self.__cmd_frame.set_sensitive(False)
+        self.__prop_box.pack_start(self.__cmd_frame, True, True, 0)
+
+        self.__cmd_box = Gtk.Box(spacing=6, orientation=Gtk.Orientation.VERTICAL)
+        self.__cmd_box.set_margin_start(10)
+        self.__cmd_box.set_margin_end(10)
+        self.__cmd_box.set_margin_top(10)
+        self.__cmd_box.set_margin_bottom(10)
+        self.__cmd_frame.add(self.__cmd_box)
+
+        self.__chk_cmd_on_start = Gtk.CheckButton.new_with_mnemonic(label="is _opened")
+        self.__chk_cmd_on_start.set_active(False)
+        self.__chk_cmd_on_start.connect("toggled", lambda x: self.__txt_cmd.set_sensitive(x.get_active() or self.__chk_cmd_on_focus.get_active()))
+        self.__cmd_box.pack_start(self.__chk_cmd_on_start, True, True, 0)
+
+        self.__chk_cmd_on_focus = Gtk.CheckButton.new_with_mnemonic(label="gains _focus")
+        self.__chk_cmd_on_focus.set_active(False)
+        self.__chk_cmd_on_focus.connect("toggled", lambda x: self.__txt_cmd.set_sensitive(x.get_active() or self.__chk_cmd_on_start.get_active()))
+        self.__cmd_box.pack_start(self.__chk_cmd_on_focus, True, True, 0)
+
+        self.__txt_cmd = Gtk.Entry()
+        self.__txt_cmd.set_sensitive(False)
+        self.__cmd_box.pack_start(self.__txt_cmd, True, True, 0)
 
 
         # buttons

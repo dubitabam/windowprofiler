@@ -21,6 +21,9 @@ class WindowProfile:
         restore_state: bool = True,
         state = None,
         geometry = None,
+        runcmd = None,
+        runcmd_on_focus = False,
+        runcmd_on_start = False
     ):
         self.resolutions: list[tuple[int, int]] = resolutions
         self.workspace: int = workspace
@@ -34,6 +37,9 @@ class WindowProfile:
         self.restore_state: bool = restore_state
         self.state: int = state
         self.geometry = geometry
+        self.runcmd: str = runcmd
+        self.runcmd_on_focus: bool = runcmd_on_focus
+        self.runcmd_on_start: bool = runcmd_on_start
 
 
     @classmethod
@@ -76,6 +82,9 @@ class WindowProfile:
             simple_object.restore_state if hasattr(simple_object, "restore_state") else True,
             simple_object.state if hasattr(simple_object, "state") else None,
             simple_object.geometry if hasattr(simple_object, "geometry") else None,
+            simple_object.runcmd if hasattr(simple_object, "runcmd") else None,
+            simple_object.runcmd_on_focus if hasattr(simple_object, "runcmd_on_focus") else False,
+            simple_object.runcmd_on_start if hasattr(simple_object, "runcmd_on_start") else False,
         )
 
 
