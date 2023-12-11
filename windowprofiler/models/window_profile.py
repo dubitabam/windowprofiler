@@ -21,7 +21,7 @@ class WindowProfile:
         restore_state: bool = True,
         state = None,
         geometry = None,
-        runcmd = None,
+        runcmd = "",
         runcmd_on_focus = False,
         runcmd_on_start = False
     ):
