@@ -86,6 +86,7 @@ class ManageProfilesDialog(Gtk.Window):
             self.__chk_fallback.set_active(True)
         else:
             self.__cmb_workspace.set_active(profile.workspace)
+            self.__chk_fallback.set_active(False)
 
         self.__chk_auto_apply.set_active(profile.auto_apply)
         self.__chk_restore_size.set_active(profile.restore_size)
